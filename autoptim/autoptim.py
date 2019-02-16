@@ -13,7 +13,6 @@ def scipy_func(objective_function, x, shapes, args=()):
     obj.backward()
     gradients = [var.grad.numpy() for var in torch_vars]
     g_vectorized, _ = vectorize(gradients)
-    print(obj.item())
     return obj.item(), g_vectorized
 
 
