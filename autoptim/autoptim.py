@@ -23,6 +23,8 @@ def minimize(objective_function, optim_vars, args=(), **kwargs):
     if type(optim_vars) is np.ndarray:
         input_is_array = True
         optim_vars = (optim_vars,)
+    else:
+        input_is_array = False
     # Vectorize optimization variables
     x0, shapes = vectorize(optim_vars)
 
