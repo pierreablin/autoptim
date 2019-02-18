@@ -1,5 +1,6 @@
 # autoptim: automatic differentiation + optimization
 
+Do you have a new machine learning model that you want to optimize, and do not want to bother computing the gradients? Autoptim is for you.
 
 ## Short presentation
 Autoptim is a small Python package that blends Pytorch's automatic differentiation in `scipy.optimize.minimize`.

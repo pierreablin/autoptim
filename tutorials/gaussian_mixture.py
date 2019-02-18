@@ -40,4 +40,4 @@ bounds = [(None, None),  # corresponds to means: no constraint
 (means, variances), _ = minimize(loss, optim_vars, args=(x,),
                                  bounds=bounds)
 
-print(means, variances)
+print(means, variances)  # Notice that they have the correct shape
