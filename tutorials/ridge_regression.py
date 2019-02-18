@@ -1,3 +1,9 @@
+# Author: Pierre Ablin <pierreablin@gmail.com>
+# License: MIT
+
+# An example with additional variables
+
+
 import numpy as np
 from autoptim import minimize
 
@@ -8,6 +14,10 @@ p = 5
 X = np.random.randn(n, p)
 y = np.random.randn(n)
 lbda = 0.1
+
+# The loss shoulb be optimized over beta, with the other parameters fixed.
+# Bear in mind that X, y, and lbda will be converted to torch tensors under
+# the hood.
 
 
 def loss(beta, X, y, lbda):

@@ -29,6 +29,10 @@ It comes with the following features:
 
 - **Smart input processing**: `scipy.optimize.minimize` is only meant to deal with one-dimensional arrays as input. In `autoptim`, variables can be multi-dimensional arrays or lists of arrays.
 
+
+### Disclaimer
+
+This package is meant to be as easy to use as possible. As so, some compromises on the speed of minimization are made.
 ## Installation
   To install, use `pip`:
   ```
@@ -38,3 +42,7 @@ It comes with the following features:
 - numpy>=1.12
 - scipy>=0.18.0
 - Pytorch>=0.4.1
+
+
+## Examples
+Several examples can be found in `autoptim/tutorials`

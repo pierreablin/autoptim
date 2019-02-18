@@ -20,7 +20,7 @@ DISTNAME = 'autoptim'
 DESCRIPTION = descr
 MAINTAINER = 'Pierre Ablin'
 MAINTAINER_EMAIL = 'pierre.ablin@inria.fr'
-LICENSE = 'BSD (3-clause)'
+LICENSE = 'MIT'
 DOWNLOAD_URL = 'https://github.com/pierreablin/autoptim.git'
 VERSION = version
 URL = ''
@@ -46,7 +46,6 @@ if __name__ == "__main__":
           url=URL,
           download_url=DOWNLOAD_URL,
           long_description=open("README.md").read(),
-          long_description_content_type="text/markdown",
           install_requires=[
           ],
           classifiers=[
