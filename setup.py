@@ -4,7 +4,7 @@ import os
 import setuptools  # noqa; we are using a setuptools namespace
 from numpy.distutils.core import setup
 
-descr = """Pptimization with autodiff"""
+descr = """Optimization with autodiff"""
 
 version = None
 with open(os.path.join('autoptim', '__init__.py'), 'r') as fid:
@@ -45,14 +45,14 @@ if __name__ == "__main__":
           version=VERSION,
           url=URL,
           download_url=DOWNLOAD_URL,
-          long_description=open('README.md').read(),
+          long_description=open("README.md").read(),
+          long_description_content_type="text/markdown",
           install_requires=[
-              'torch',
           ],
           classifiers=[
               'Intended Audience :: Science/Research',
               'Intended Audience :: Developers',
-              'License :: OSI Approved',
+              'License :: OSI Approved :: MIT License',
               'Programming Language :: Python',
               'Topic :: Software Development',
               'Topic :: Scientific/Engineering',

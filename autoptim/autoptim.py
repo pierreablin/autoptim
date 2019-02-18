@@ -1,3 +1,6 @@
+# Author: Pierre Ablin <pierreablin@gmail.com>
+# License: MIT
+
 import numpy as np
 import torch
 
@@ -35,7 +38,7 @@ def minimize(objective_function, optim_vars, args=(), **kwargs):
         args : tuple, optional
             Extra arguments passed to the objective function.
         kwargs : dict, optional
-            extra arguments passed to scipy.optimize.minimize. See
+            Extra arguments passed to scipy.optimize.minimize. See
             https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html
             for the full list of available keywords.
         Returns
