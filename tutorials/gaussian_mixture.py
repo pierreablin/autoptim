@@ -21,8 +21,7 @@ def loss(means, variances, x):
 means0 = np.random.randn(n_components)
 variances0 = np.random.rand(n_components)
 
-bounds = [(None, None), ] * n_components
-bounds += [(0, None), ] * n_components  # Variance should be >0
+bounds = [(None, None), (0, None)]  # Variance should be >0
 (means, variances), _ = minimize(loss, (means0, variances0), args=(x,),
                                  bounds=bounds)
 
