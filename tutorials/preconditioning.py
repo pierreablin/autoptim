@@ -5,8 +5,8 @@
 # || y - X.dot(beta)|| ** 2 + lambda * || beta || ** 2.
 # The Hessian of the problem is 2 * (X^TX + lambda * Id).
 # For approximately decorellated X, it is well approximated by its diagonal,
-# whose square root gives a natural preconditioner. It is extremely simple to
-# implement using autoptim !
+# whose square root gives a natural preconditioner. It is simple to
+# implement using autoptim.
 from time import time
 
 import autograd.numpy as np
@@ -28,7 +28,7 @@ def loss(beta, X, y, lbda):
     return np.sum((np.dot(X, beta) - y) ** 2) + lbda * np.sum(beta ** 2)
 
 # Define the preconditioner. Note that it is much faster to compute than the
-# whole Hessian (O(p * n ^2))
+# whole Hessian.
 
 
 hessian_approx = 2 * lbda * np.ones(p)

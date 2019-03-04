@@ -32,20 +32,21 @@ def test_multiple_shapes():
 
 
 def test_preconditioning():
-    def f(x, y, z, a):
+    def f(x, y, z, a, b):
         return np.sum(x ** 2) + np.sum((y - 3) ** 2) + np.sum((z + a) ** 4)
 
     a = 2
+    b = 5
     shapes = [(2, 3), (2, 2), (3,)]
     optim_vars_init = [np.ones(shape) for shape in shapes]
 
-    def precon_fwd(x, y, z, a):
+    def precon_fwd(x, y, z, a, b):
         return 3 * x, y / 2, z * 4
 
-    def precon_bwd(x, y, z, a):
+    def precon_bwd(x, y, z, a, b):
         return x / 3, 2 * y, z / 4
 
-    optim_vars, res = minimize(f, optim_vars_init, args=(a,),
+    optim_vars, res = minimize(f, optim_vars_init, args=(a, b),
                                precon_fwd=precon_fwd, precon_bwd=precon_bwd)
     assert res['success']
     assert [var.shape for var in optim_vars] == shapes

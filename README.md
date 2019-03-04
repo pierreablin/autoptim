@@ -29,6 +29,7 @@ It comes with the following features:
 - **Natural interfacing with Numpy**: The objective function is written in standard Numpy. The input/ output of `autoptim.minimize` are Numpy arrays.
 
 - **Smart input processing**: `scipy.optimize.minimize` is only meant to deal with one-dimensional arrays as input. In `autoptim`, variables can be multi-dimensional arrays or lists of arrays.
+- **Preconditioning**: Preconditioning is a simple way to accelerate minimization, by doing a change of variables. `autoptim` makes preconditioning straightforward. 
 
 
 ### Disclaimer
