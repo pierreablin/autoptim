@@ -3,27 +3,26 @@
 
 # Example with several variables
 
-import numpy as np
-import torch
+import autograd.numpy as np
 
 from autoptim import minimize
 
 n = 1000
 n_components = 3
 
-x = np.concatenate((np.random.randn(n),
-                    2 * np.random.randn(n),
-                    np.random.randn(n) + 1))
+x = np.concatenate((np.random.randn(n) - 1,
+                    3 * np.random.randn(n),
+                    np.random.randn(n) + 2))
 
 
 # Here, the model should fit both the means and the variances. Using
 # scipy.optimize.minimize, one would have to vectorize by hand these variables.
 
 def loss(means, variances, x):
-    tmp = torch.zeros(n_components * n).double()
+    tmp = np.zeros(n_components * n)
     for m, v in zip(means, variances):
-        tmp += torch.exp(-(x - m) ** 2 / (2 * v ** 2)) / v
-    return -torch.log(tmp).sum()
+        tmp += np.exp(-(x - m) ** 2 / (2 * v ** 2)) / v
+    return -np.sum(np.log(tmp))
 
 
 # autoptim can handle lists of unknown variables
