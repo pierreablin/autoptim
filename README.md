@@ -2,8 +2,13 @@
 
 Do you have a new machine learning model that you want to optimize, and do not want to bother computing the gradients? Autoptim is for you.
 
+
+### Warning:
+As of version 0.3, `pytorch` has been replaced with `autograd` for automatic differentiation. It makes the interfacing with numpy even simpler.
+
+
 ## Short presentation
-Autoptim is a small Python package that blends `autograd` automatic differentiation in `scipy.optimize.minimize`.
+Autoptim is a small Python package that blends `autograd`'s automatic differentiation in `scipy.optimize.minimize`.
 
 The gradients are computed under the hood using automatic differentiation; the user only provides the objective function:
 
@@ -29,7 +34,7 @@ It comes with the following features:
 - **Natural interfacing with Numpy**: The objective function is written in standard Numpy. The input/ output of `autoptim.minimize` are Numpy arrays.
 
 - **Smart input processing**: `scipy.optimize.minimize` is only meant to deal with one-dimensional arrays as input. In `autoptim`, variables can be multi-dimensional arrays or lists of arrays.
-- **Preconditioning**: Preconditioning is a simple way to accelerate minimization, by doing a change of variables. `autoptim` makes preconditioning straightforward. 
+- **Preconditioning**: Preconditioning is a simple way to accelerate minimization, by doing a change of variables. `autoptim` makes preconditioning straightforward.
 
 
 ### Disclaimer
