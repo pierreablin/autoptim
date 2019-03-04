@@ -18,7 +18,14 @@ def _scipy_func(objective_function, gradient, x, shapes, args=()):
     return obj, g_vectorized
 
 
-def minimize(objective_function, optim_vars, args=(), **kwargs):
+def _convert_to_tuple(optim_vars):
+    if type(optim_vars) not in (list, tuple):
+        return (optim_vars,)
+    return optim_vars
+
+
+def minimize(objective_function, optim_vars, args=(), precon_fwd=None,
+             precon_bwd=None, **kwargs):
     """A wrapper to call scipy.optimize.minimize while computing the gradients
        using autograd's auto-differentiation.
         Parameters
@@ -29,12 +36,31 @@ def minimize(objective_function, optim_vars, args=(), **kwargs):
             or
                 ``fun(*optim_vars, *args) -> float``
             where optim_vars is either a numpy array or a list of numpy
-            arrays and `args` is a tuple of the fixed parameters needed to
+            arrays and `args` is a tuple of fixed parameters needed to
             completely specify the function.
         optim_vars : ndarray or list of ndarrays
             Initial guess.
         args : tuple, optional
             Extra arguments passed to the objective function.
+        precon_fwd : callable, optional
+            The forward preconditioning.
+                ``fun(optim_vars, *args) -> precon_optim_vars``
+            or
+                ``fun(*optim_vars, *args) -> precon_optim_vars``
+            where optim_vars is either a numpy array or a list of numpy
+            arrays and `args` is a tuple of fixed parameters needed to
+            completely specify the function.
+            The optimized function will be the composition:
+            `objective_function(precon_fwd(optim_vars))`.
+        precon_bwd : callable, optional
+            The backward preconditioning.
+                ``fun(precon_optim_vars, *args) -> optim_vars``
+            or
+                ``fun(*precon_optim_vars, *args) -> optim_vars``
+            where optim_vars is either a numpy array or a list of numpy
+            arrays and `args` is a tuple of fixed parameters needed to
+            completely specify the function.
+            This should be the reciprocal function of precon_fwd.
         kwargs : dict, optional
             Extra arguments passed to scipy.optimize.minimize. See
             https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html
@@ -50,6 +76,29 @@ def minimize(objective_function, optim_vars, args=(), **kwargs):
             ``message`` which describes the cause of the termination. See
             `OptimizeResult` for a description of other attributes.
         """
+    # Check if there is preconditioning:
+    precondition = precon_fwd is not None
+    if precondition != (precon_bwd is not None):
+        error_string = {True: 'precon_fwd', False: 'precon_bwd'}[precondition]
+        raise ValueError('You should specify both precon_fwd and precon_bwd,'
+                         ' you only specified %s' % error_string)
+    if precondition:  # Run `minimize` in the preconditioned space:
+
+        optim_vars = _convert_to_tuple(optim_vars)
+        precon_optim_vars = precon_fwd(*optim_vars, *args)
+        n_args = len(args)
+
+        def precon_objective(*precon_optim_vars_and_args):
+            args = precon_optim_vars_and_args[-n_args:]
+            optim_vars = precon_bwd(*precon_optim_vars_and_args)
+            optim_vars = _convert_to_tuple(optim_vars)
+            return objective_function(*optim_vars, *args)
+
+        precon_result, res = minimize(precon_objective, precon_optim_vars,
+                                      args=args, precon_fwd=None,
+                                      precon_bwd=None, **kwargs)
+        precon_result = _convert_to_tuple(precon_result)
+        return precon_bwd(*precon_result, *args), res
     # Check if there are bounds:
     bounds = kwargs.get('bounds')
     bounds_in_kwargs = bounds is not None
