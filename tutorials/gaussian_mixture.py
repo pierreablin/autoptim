@@ -10,9 +10,9 @@ from autoptim import minimize
 n = 1000
 n_components = 3
 
-x = np.concatenate((np.random.randn(n),
-                    2 * np.random.randn(n),
-                    np.random.randn(n) + 1))
+x = np.concatenate((np.random.randn(n) - 1,
+                    3 * np.random.randn(n),
+                    np.random.randn(n) + 2))
 
 
 # Here, the model should fit both the means and the variances. Using

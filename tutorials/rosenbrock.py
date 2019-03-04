@@ -8,7 +8,7 @@ import autograd.numpy as np
 from autoptim import minimize
 
 
-# Specify the loss function, in a pytorch compatible-way :
+# Specify the loss function :
 def rosenbrock(x):
     return (1 - x[0]) ** 2 + 100 * (x[1] - x[0] ** 2) ** 2
 

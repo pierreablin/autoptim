@@ -12,7 +12,7 @@ p = 2
 
 X = np.random.randn(n, p)
 
-# The loss is minimized when W.dot(X) is decorrelated.
+# The loss is minimized when X.dot(W) is decorrelated.
 
 
 def loss(W, X):
