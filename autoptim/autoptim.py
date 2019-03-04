@@ -1,22 +1,21 @@
 # Author: Pierre Ablin <pierreablin@gmail.com>
 # License: MIT
 
-import numpy as np
-import torch
+import numpy as np_
+
+import autograd.numpy as np
+
+from autograd import grad
 
 from scipy.optimize import minimize as minimize_
 
 
-def _scipy_func(objective_function, x, shapes, args=()):
+def _scipy_func(objective_function, gradient, x, shapes, args=()):
     optim_vars = _split(x, shapes)
-
-    torch_vars = [torch.tensor(var, requires_grad=True) for var in optim_vars]
-    del optim_vars
-    obj = objective_function(*torch_vars, *args)
-    obj.backward()
-    gradients = [var.grad.numpy() for var in torch_vars]
+    obj = objective_function(optim_vars, *args)
+    gradients = gradient(optim_vars, *args)
     g_vectorized, _ = _vectorize(gradients)
-    return obj.item(), g_vectorized
+    return obj, g_vectorized
 
 
 def minimize(objective_function, optim_vars, args=(), **kwargs):
@@ -29,10 +28,9 @@ def minimize(objective_function, optim_vars, args=(), **kwargs):
                 ``fun(optim_vars, *args) -> float``
             or
                 ``fun(*optim_vars, *args) -> float``
-            where optim_vars is either a torch tensor or a list of torch
-            tensors and `args` is a tuple of the fixed parameters needed to
-            completely specify the function. The function should be written
-            in pytorch.
+            where optim_vars is either a numpy array or a list of numpy
+            arrays and `args` is a tuple of the fixed parameters needed to
+            completely specify the function.
         optim_vars : ndarray or list of ndarrays
             Initial guess.
         args : tuple, optional
@@ -52,9 +50,6 @@ def minimize(objective_function, optim_vars, args=(), **kwargs):
             ``message`` which describes the cause of the termination. See
             `OptimizeResult` for a description of other attributes.
         """
-    # Convert args to torch
-    args_torch = [torch.tensor(arg).double() for arg in args]
-
     # Check if there are bounds:
     bounds = kwargs.get('bounds')
     bounds_in_kwargs = bounds is not None
@@ -68,6 +63,13 @@ def minimize(objective_function, optim_vars, args=(), **kwargs):
     else:
         input_is_array = False
 
+    # Convert loss to readable autograd format
+
+    def objective_converted(optim_vars, *args):
+        return objective_function(*optim_vars, *args)
+
+    # Compute the gradient
+    gradient = grad(objective_converted)
     # Vectorize optimization variables
     x0, shapes = _vectorize(optim_vars)
 
@@ -78,7 +80,7 @@ def minimize(objective_function, optim_vars, args=(), **kwargs):
 
     # Define the scipy optimized function and run scipy.minimize
     def func(x):
-        return _scipy_func(objective_function, x, shapes, args_torch)
+        return _scipy_func(objective_converted, gradient, x, shapes, args)
     res = minimize_(func, x0, jac=True, **kwargs)
 
     # Convert output to the input format

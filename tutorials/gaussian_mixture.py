@@ -3,8 +3,7 @@
 
 # Example with several variables
 
-import numpy as np
-import torch
+import autograd.numpy as np
 
 from autoptim import minimize
 
@@ -20,10 +19,10 @@ x = np.concatenate((np.random.randn(n),
 # scipy.optimize.minimize, one would have to vectorize by hand these variables.
 
 def loss(means, variances, x):
-    tmp = torch.zeros(n_components * n).double()
+    tmp = np.zeros(n_components * n)
     for m, v in zip(means, variances):
-        tmp += torch.exp(-(x - m) ** 2 / (2 * v ** 2)) / v
-    return -torch.log(tmp).sum()
+        tmp += np.exp(-(x - m) ** 2 / (2 * v ** 2)) / v
+    return -np.sum(np.log(tmp))
 
 
 # autoptim can handle lists of unknown variables

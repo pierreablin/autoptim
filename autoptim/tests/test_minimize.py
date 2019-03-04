@@ -1,7 +1,7 @@
 # Author: Pierre Ablin <pierreablin@gmail.com>
 # License: MIT
 
-import numpy as np
+import autograd.numpy as np
 from numpy.testing import assert_allclose
 
 from autoptim import minimize
@@ -19,7 +19,7 @@ def test_rosenbrock():
 
 def test_multiple_shapes():
     def f(x, y, z, a):
-        return (x ** 2).sum() + ((y - 3) ** 2).sum() + ((z + a) ** 4).sum()
+        return np.sum(x ** 2) + np.sum((y - 3) ** 2) + np.sum((z + a) ** 4)
 
     a = 2
     shapes = [(2, 3), (2, 2), (3,)]

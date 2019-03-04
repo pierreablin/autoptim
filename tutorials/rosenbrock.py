@@ -4,7 +4,7 @@
 # This is the simplest example of autoptim use.
 
 
-import numpy as np
+import autograd.numpy as np
 from autoptim import minimize
 
 

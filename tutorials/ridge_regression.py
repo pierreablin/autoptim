@@ -4,7 +4,7 @@
 # An example with additional variables
 
 
-import numpy as np
+import autograd.numpy as np
 from autoptim import minimize
 
 
@@ -21,7 +21,7 @@ lbda = 0.1
 
 
 def loss(beta, X, y, lbda):
-    return ((X.mv(beta) - y) ** 2).sum() + lbda * (beta ** 2).sum()
+    return np.sum((np.dot(X, beta) - y) ** 2) + lbda * np.sum(beta ** 2)
 
 
 beta0 = np.random.randn(p)

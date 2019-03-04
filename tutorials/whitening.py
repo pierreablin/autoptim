@@ -3,7 +3,7 @@
 
 
 # Example of multi-dimensional arrays
-import numpy as np
+import autograd.numpy as np
 from autoptim import minimize
 
 
@@ -16,8 +16,8 @@ X = np.random.randn(n, p)
 
 
 def loss(W, X):
-    Y = X.mm(W)
-    return -W.logdet() + 0.5 * (Y ** 2).sum() / n
+    Y = np.dot(X, W)
+    return -np.linalg.slogdet(W)[1] + 0.5 * np.sum(Y ** 2) / n
 
 
 # The input is a square matrix
