@@ -20,7 +20,7 @@ def _scipy_func(objective_function, gradient, x, shapes, args=()):
 
 def minimize(objective_function, optim_vars, args=(), **kwargs):
     """A wrapper to call scipy.optimize.minimize while computing the gradients
-       using pytorch's auto-differentiation.
+       using autograd's auto-differentiation.
         Parameters
         ----------
         objective_function : callable
